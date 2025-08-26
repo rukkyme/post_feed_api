@@ -13,7 +13,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:13
+        image: postgres:16
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -55,6 +55,7 @@ jobs:
       - name: Run tests
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
+          SECRET_KEY : dummy-test-key
         run: |
           python manage.py migrate
           python manage.py test
@@ -88,9 +89,9 @@ jobs:
           push: true
           tags: your-dockerhub-username/post_feed_api:latest
 
-      # 4. Deploy to VPS (example)
-      - name: Deploy to VPS
-        uses: appleboy/ssh-action@v1.2.0
+      # 4. Deploy to Render
+      - name: Deploy to Render
+        uses: 
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
