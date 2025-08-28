@@ -11,7 +11,7 @@ W_P = float(os.getenv("WEIGHT_POPULARITY", 0.2))
 W_A = float(os.getenv("WEIGHT_AFFINITY", 0.3))
 LAMBDA = float(os.getenv("RECENCY_LAMBDA", 0.05))
 
-def recency_decay(created_at, now, lam=LAMBDA): #this computes how fress a post is. new post will give high score, older post- decayed score
+def recency_decay(created_at, now, lam=LAMBDA): #this computes how fresh a post is. new post will give high score, older post- decayed score
     age_hours = (now - created_at).total_seconds() / 3600.0
     return math.exp(-lam * age_hours)
 

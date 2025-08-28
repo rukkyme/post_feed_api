@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.contrib.auth import get_user_model
 
 User = get_user_model()  #stores the results of the active User model-get_user_model-that allows us be flexible when we need info about users, other than the one in the User database table that django.contrib.auth.models.User, can provide, hence we swap out of the User model
