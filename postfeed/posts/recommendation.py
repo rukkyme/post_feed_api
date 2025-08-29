@@ -12,7 +12,7 @@ W_A = float(os.getenv("WEIGHT_AFFINITY", 0.3))
 LAMBDA = float(os.getenv("RECENCY_LAMBDA", 0.05))
 
 def recency_decay(created_at, now, lam=LAMBDA): #this computes how fresh a post is. new post will give high score, older post- decayed score
-    age_hours = (now - created_at).total_seconds() / 3600.0
+    age_hours = (now - created_at).total_seconds() / 3600.0 # this creates a time diff that is multiplied by its seconds equivalent first and then / by 3600 to conver back to hours.
     return math.exp(-lam * age_hours)
 
 def popularity(like_count):     #calculates popularity score using natural log of likes
@@ -44,12 +44,30 @@ def score_posts_for_user(user, queryset):
 
     scored = []
     for p in queryset:
-        s = (
-            W_R * recency_decay(p.created_at, now, LAMBDA)
-            + W_P * popularity(getattr(p, "like_count", 0))
-            + W_A * affinity(utw, list(p.tags.all()))
-        )
-        scored.append((p, float(s)))
+        rec = recency_decay(p.created_at, now, LAMBDA)
 
-    scored.sort(key=lambda t: (t[1], t[0].created_at, t[0].id), reverse=True)
+        pop = popularity(getattr(p, "like_count", 0))
+
+        aff = affinity(utw, list(p.tags.all()))
+
+        
+        s = (
+            3.0 * rec   # strong preference for fresh posts
+            + 0.8 * pop # popularity still matters but less
+            + 1.2 * aff # affinity gets the highest weight
+        )
+        
+        #Add a very small tiebreaker from popularity (epsilon)
+        s += 0.0001 * getattr(p, "like_count", 0)
+        s += (0.000001 * p.id)
+        
+        scored.append((p, round(float(s), 6)))
+
+    scored.sort(
+        key=lambda t: (
+            t[1], 
+            t[0].created_at, 
+            t[0].id
+        ), 
+        reverse=True)
     return scored
