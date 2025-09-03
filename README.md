@@ -26,19 +26,27 @@ PostgreSQL
 
 ##  Local Setup Locally
 1. Clone repo
-2 Create virtual environment and activate it. Then install Docker in root project
 
-3. **To run migrations on docker** /n
-docker compose build web up /n
-docker compose up -d /n
+2. Create virtual environment and activate it. Then install Docker in root project
+
+3. **To run migrations on docker** 
+
+docker compose build web up 
+
+docker compose up -d 
+
 python manage.py makemigration
-docker compose exec web /n
+
+docker compose exec web 
+
 python manage.py migrate
 
-4.  **To populate with seed data(while on docker)**
+4.  **To populate with seed data(while on docker)** 
+
 docker compose exec web python manage.py seed --flush --users=10 --tags=15 --posts=30 --likes=100
 
-5.  **without flush**
+5.  **without flush** 
+
 docker compose exec web python manage.py seed --users=10 --tags=15 --posts=30 --likes=100
 
 
