@@ -25,17 +25,15 @@ venv
 PostgreSQL
 
 ##  Local Setup Locally
-!. Clone repo
-.2 Create virtual environment and activate it
-install Docker in root project
+1. Clone repo
+2 Create virtual environment and activate it. Then install Docker in root project
 
-
-3. **To run migrations on docker**
-docker compose build web up
-docker compose up -d
-
+3. **To run migrations on docker** /n
+docker compose build web up /n
+docker compose up -d /n
 python manage.py makemigration
-docker compose exec web python manage.py migrate
+docker compose exec web /n
+python manage.py migrate
 
 4.  **To populate with seed data(while on docker)**
 docker compose exec web python manage.py seed --flush --users=10 --tags=15 --posts=30 --likes=100
@@ -69,7 +67,7 @@ Call protected endpoints with Bearer token:
   -H "Authorization: Bearer <your_access_token_here>"
 
  curl http://localhost:8000/api/feed/ \
-  -H "Authorization: Bearer <your_access_token_here>"
+  -H "Authorization: Bearer <your_access_token_here>"     
 
 ** To list users**
  curl http://localhost:8000/api/users/
@@ -105,6 +103,10 @@ api/posts/{id}/likes|   POST      |  Likee a new like
 api/posts/{id}/unlike| DELETE     |   Unlike a post
 
 api/feed/           |  GET        |  Personalized feed for the logged-in user (with scores)
+
+##  Automated Testing
+docker compose exec web python manage.py test posts
+
 
 ##  Recommendation
 Recommendation Method
